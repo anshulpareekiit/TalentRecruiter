@@ -6,4 +6,4 @@ run: pip3 install -r requirements.txt;
 
 Once installed run below given command
 To run the server use below given command:
-uvicorn main:app --reload 
+uvicorn main:app --reload  ß

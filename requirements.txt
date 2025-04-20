@@ -1,0 +1,12 @@
+fastapi[standard]
+uvicorn[standard]
+pydantic[dotenv]
+python-dotenv
+sqlalchemy
+pymysql
+pydantic-mysql
+psycopg2-binary
+pytest
+httpx
+python-multipart
+aiofiles

@@ -10,8 +10,8 @@ usage: once setup the virtual env then run
 COMMAND: uvicorn main:app --reload 
 ######################################################################"""
 from fastapi import FastAPI
-from app.database.mysqlConnection import engine, Base
-from app.users import schema
+from app.database.mysqlConnection import engine
+from app.entities import user
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Depends, status
 from typing import Annotated
@@ -19,6 +19,6 @@ from sqlalchemy.orm import Session
 from app.routers import register_routes
 
 app = FastAPI()
-schema.Base.metadata.create_all(bind=engine)
+user.Base.metadata.create_all(bind=engine)
 register_routes(app)
 

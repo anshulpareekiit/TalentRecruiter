@@ -11,11 +11,8 @@ COMMAND: uvicorn main:app --reload
 ######################################################################"""
 from fastapi import FastAPI
 from app.database.mysqlConnection import engine
-from app.entities import user
-from pydantic import BaseModel
-from fastapi import FastAPI, HTTPException, Depends, status
-from typing import Annotated
-from sqlalchemy.orm import Session
+from app.entities import user, company
+from fastapi import FastAPI
 from app.routers import register_routes
 
 app = FastAPI()

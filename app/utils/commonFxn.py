@@ -18,5 +18,4 @@ class CommonFxn:
             resp = [model.model_validate(res).model_dump() for res in result]
         return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
         """
-    
     pass

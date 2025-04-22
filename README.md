@@ -1,10 +1,10 @@
-# 🚀 FastAPI + MySQL Project
+# 🚀 Talent Recruiter
 
 A scalable, modular microservice built with **FastAPI**, **SQLAlchemy**, and **MySQL** — designed for real-world enterprise-grade backend applications.
 
 # Contributors:
-**Anshul Pareek**
-**Rakesh Shekhawat**
+**Anshul Pareek**, 
+**Rakesh Shekhawat**, 
 **Pankaj Kumar**
 ---
 

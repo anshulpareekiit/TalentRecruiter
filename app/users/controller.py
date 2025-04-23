@@ -23,7 +23,7 @@ async def createUser(user:model.UserCreate, db:Dbsession):
     return {"message":"User created successfully!","response":db_user};
 
 #update user record
-@router.put("/{user_id}", response_model=model.UserResponse)
+@router.put("updateUser/{user_id}", response_model=model.UserResponse)
 async def updateUser(db:Dbsession, user_id:int, user_update:model.UserBase):
     return userServiceObj.updateUser(db,user_id,user_update)
     
@@ -31,3 +31,7 @@ async def updateUser(db:Dbsession, user_id:int, user_update:model.UserBase):
 @router.get("/{user_id}", response_model=model.UserById)
 async def getUserById(db:Dbsession, user_id:int):
     return userServiceObj.getUserById(db,user_id)
+
+@router.put("/sendPwdLink")
+async def sendPwdLink(db:Dbsession, input_data:model.SendPwdLink):
+    return userServiceObj.sendPwdLink(db,input_data)

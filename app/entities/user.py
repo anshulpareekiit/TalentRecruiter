@@ -33,9 +33,11 @@ class User(Base):
     email:Mapped[str] = mapped_column(String(100), nullable= False)
     mobile:Mapped[str] = mapped_column(String(10), nullable=True)
     role:Mapped[UserRole] = mapped_column(SqlEnum(UserRole), default=UserRole.company_user, nullable=False)
-    company_id:Mapped[int|None] = mapped_column(ForeignKey('companies.id'), nullable=True)
     is_active:Mapped[bool] = mapped_column(Boolean, default=True)
-    password:Mapped[str] =mapped_column(String(200), nullable=False)
+    password:Mapped[str] =mapped_column(String(200), nullable=True)
+    password_token:Mapped[str] = mapped_column(String(100),nullable=True)
+    token_expire_datetime:Mapped[DateTime] = mapped_column(DateTime,nullable=True)
+    is_token_used:Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     created_at:Mapped[DateTime] = mapped_column(DateTime, default=datetime.now())
     #from app.entities.company import Company    
     #company: Mapped["Company"] = relationship("Company", back_populates="users")

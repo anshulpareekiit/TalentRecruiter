@@ -4,13 +4,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session, declarative_base, DeclarativeBase
 import os
 from dotenv import load_dotenv
- 
-load_dotenv()
+from app.core.config import settings
+#load_dotenv()
 
+#DBURL = os.getenv("MYSQLURL")
 
-DBURL = os.getenv("MYSQLURL")
-
-engine = create_engine(DBURL) 
+engine = create_engine(settings.MYSQLURL) 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

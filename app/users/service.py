@@ -4,6 +4,11 @@ from fastapi import FastAPI, status, HTTPException
 from app.entities.user import User
 from fastapi.responses import JSONResponse
 from app.utils.commonFxn import CommonFxn
+import base64
+from datetime import datetime, timedelta
+import smtplib
+from email.mime.text import MIMEText
+from app.core.config import settings
 
 class UsersService:
     not_found_msg = "Record Not Found!"
@@ -19,7 +24,6 @@ class UsersService:
                  resp = duplicate_resp
             else:
                 db_user = User(**user.model_dump())
-                
                 db.add(db_user)
                 db.commit()
                 db.refresh(db_user)
@@ -35,7 +39,50 @@ class UsersService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
                 detail=f"{self.went_wrong_msg}:{str(e)}"
                 )
+    #send password link and set token expiry with token to be checked
+    def sendPwdLink(self,db:Dbsession, user_model:model.SendPwdLink):
+        user_data = db.query(User).filter(User.username == user_model.username).first()
+        if user_data is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        try:
+            user_data.password_token = base64.b64encode(user_data.email.encode('utf-8'))
+            #self._sendPwdSetEmail(user_data.email, user_data.password_token)
+            self._sendPwdSetEmail(user_data)
+            self._setToken(user_model, user_data, db)
+            return JSONResponse(
+                    content={'message':'Password Set Email sent successfully!'}, 
+                    status_code=status.HTTP_200_OK
+            )
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+                detail=f"{self.went_wrong_msg}:{str(e)}")
         
+    
+    #setting the token for password reset functionality
+    def _setToken(self,user_model:model.SendPwdLink, user_data:User, db:Dbsession):
+        now = datetime.now()
+        user_data.token_expire_datetime = now + timedelta(minutes = 10)
+        user_data.is_token_used = False
+        db.commit()
+        db.refresh(user_data)
+        return user_data
+    
+    #SEND EMAIL TO SET PASSWORD
+    def _sendPwdSetEmail(self,user_data:User):
+        subject = "Set Your Password"
+        
+        body = f"Hi,\n\nClick the link below to set your password:{user_data.password_token}\n\n\nThis link will expire in 30 minutes."
+        msg = MIMEText(body)
+        msg['Subject'] = subject
+        msg['From'] = "7f7596cfca-fa3cbc+1@inbox.mailtrap.io"
+        msg['To'] = user_data.email
+        settings.SMTP_HOST
+        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+            if settings.SMTP_USE_TLS:
+                server.starttls()
+        
+            server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+            server.sendmail(msg['From'], [msg['To']], msg.as_string())
 
     #get all user list
     def getAllUsers(self, db:Dbsession):

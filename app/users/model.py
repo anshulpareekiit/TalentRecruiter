@@ -1,6 +1,7 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr
 from enum import Enum
 from typing import Optional
+from datetime import datetime
 
 class UserRole(str, Enum):
     super_admin = 'super_admin'
@@ -26,16 +27,18 @@ class UserCreate(BaseModel):
     mobile:str
     role:UserRole
     is_active:bool = True
-    company_id:Optional[str] = None
-    password:str = Field(min_length=8, max_length=50)
-
+    
+#req Input for send password link
+class SendPwdLink(BaseModel):
+    username:str    
+    
+                       
 class UserUpdate(BaseModel):
     email:Optional[str] = None
     mobile:Optional[str] = None
     role:Optional[UserRole] = None
     is_active:Optional[bool] = None
     company_id:Optional[str] = None
-    password:Optional[str] = Field(default=None,min_length=8, max_length=50)
     model_config = ConfigDict(from_attributes = True)
     
 class UserById(UserBase):

@@ -10,3 +10,4 @@ pytest
 httpx
 python-multipart
 aiofiles
+pydantic-settings

@@ -13,14 +13,13 @@ userServiceObj = UsersService()
 
 #get all users at once
 @router.get('/allUsers', response_model=list[model.UserResponse])
-async def getAllUsers(db:Dbsession):
-    return userServiceObj.getAllUsers(db)
+async def getAllUsers(db:Dbsession, skip: int = 0, limit: int = 10,):
+    return userServiceObj.getAllUsers(db, skip=skip, limit=limit)
 
 #create new record
 @router.post("/create/", status_code=status.HTTP_201_CREATED)
 async def createUser(user:model.UserCreate, db:Dbsession):
-    db_user = userServiceObj.createUser(user,db)
-    return {"message":"User created successfully!","response":db_user};
+    return userServiceObj.createUser(user,db)
 
 #update user record
 @router.put("updateUser/{user_id}", response_model=model.UserResponse)
@@ -35,3 +34,7 @@ async def getUserById(db:Dbsession, user_id:int):
 @router.put("/sendPwdLink")
 async def sendPwdLink(db:Dbsession, input_data:model.SendPwdLink):
     return userServiceObj.sendPwdLink(db,input_data)
+
+@router.put("/setPassword")
+def setPassword(db:Dbsession, input_data:model.SetPassword):
+    return userServiceObj.setPassword(db,input_data)

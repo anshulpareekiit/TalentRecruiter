@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.users.controller import router as users_router
+from app.api.v1.users.usersController import router as users_router
 
 #register_routers FastAPI
 #description: to register each router here we need to provide the router details folder name as user then register controller here

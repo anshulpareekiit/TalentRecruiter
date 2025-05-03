@@ -33,13 +33,16 @@ class SendPwdLink(BaseModel):
     username:str    
     
 class SetPassword(BaseModel):
-    id:int
+    id:Optional[str]=None
+    username:str
     password:str
     password_token:str
     is_token_used:bool=None
                        
 class UserUpdate(BaseModel):
-    username:Optional[str]
+    username:Optional[str] = None
+    f_name:Optional[str] = None
+    l_name:Optional[str] = None
     email:Optional[str] = None
     mobile:Optional[str] = None
     role:Optional[UserRole] = None

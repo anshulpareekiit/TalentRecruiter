@@ -4,10 +4,10 @@ pydantic[dotenv]
 python-dotenv
 sqlalchemy
 pymysql
-pydantic-mysql
 psycopg2-binary
 pytest
 httpx
 python-multipart
 aiofiles
 pydantic-settings
+bcrypt

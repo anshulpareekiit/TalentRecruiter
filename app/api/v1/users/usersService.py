@@ -68,7 +68,7 @@ class UsersService:
                 db.commit()
                 db.refresh(user_exists)
                 
-                return success_response(content=UserLabels.msg_password_set_success)
+                return success_response(UserLabels.msg_password_set_success)
             except Exception as e:
                 raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=e)
         
@@ -154,10 +154,9 @@ class UsersService:
     def _isTokenActive(self, db:Dbsession, user_data:User):
         user = db.query(User).filter(
             User.id == user_data.id,
-                or_(
-                    User.token_expire_datetime<datetime.now(),
-                    User.password_token == user_data.password_token
-                ),
+            User.token_expire_datetime<datetime.now(),
+            User.password_token == user_data.password_token
+                
             ).first()
         if user is not None:
             raise HTTPException(

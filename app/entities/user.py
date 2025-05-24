@@ -39,8 +39,9 @@ class User(Base):
     token_expire_datetime:Mapped[DateTime] = mapped_column(DateTime,nullable=True)
     is_token_used:Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     created_at:Mapped[DateTime] = mapped_column(DateTime, default=datetime.now())
-    #from app.entities.company import Company    
-    #company: Mapped["Company"] = relationship("Company", back_populates="users")
     
+#    userSessionToken = relationship('userSessionToken', back_populates='users')
+    userSessionToken = relationship("UserSessionToken", back_populates="users", uselist=False)
+
 
 

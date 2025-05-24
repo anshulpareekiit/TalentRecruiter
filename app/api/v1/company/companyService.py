@@ -2,11 +2,8 @@ from app.database.mysqlConnection import Dbsession
 from . import companyModel
 from fastapi import status, HTTPException
 from app.entities.company import Company
-from fastapi.responses import JSONResponse
 from app.utils.commonFxn import CommonFxn
-import base64
-from datetime import datetime, timedelta
-from app.labels.userLabels import UserLabels 
+from app.labels.commonMsgLabels import CommonMsgLabels 
 from sqlalchemy import or_, and_
 from app.utils.responseHandler import success_response
 
@@ -27,7 +24,7 @@ class CompanyService:
             db.add(db_company)
             db.commit()
             db.refresh(db_company)
-            return success_response(UserLabels.msg_user_created_success)
+            return success_response(CommonMsgLabels.msg_created_success)
         except HTTPException as e:
             db.rollback()
             # Handle the exception raised from check_duplicate_user or any inner function throwing error
@@ -42,7 +39,7 @@ class CompanyService:
         try:
             company_detail = db.query(Company).filter(Company.id == company_id).first()
             if company_detail is None:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=UserLabels.err_msg_record_not_found)
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=CommonMsgLabels.err_msg_record_not_found)
             self._duplicateCompany(db,company_data,company_id=company_id)
             # Safely update only provided fields
             company_data_dict = company_data.model_dump(exclude_unset=True)
@@ -54,7 +51,7 @@ class CompanyService:
                     setattr(company_detail, key, value)
             db.commit()
             db.refresh(company_detail)
-            return success_response(UserLabels.msg_update_success)
+            return success_response(CommonMsgLabels.msg_update_success)
 
         except HTTPException as e:
             raise HTTPException(status_code=e.status_code, detail=e.detail)
@@ -72,7 +69,7 @@ class CompanyService:
                 #converting response in json format
                 resp = companyModel.CompanyResponse.model_validate(result).model_dump()
             else:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=UserLabels.err_msg_record_not_found)
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=CommonMsgLabels.err_msg_record_not_found)
             return resp
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=e)
@@ -91,13 +88,13 @@ class CompanyService:
             cond = and_(Company.email == company.email, company_id!=Company.id)
         ##Check if duplicate records found
         if db.query(Company).filter(cond).first() != None:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=UserLabels.err_msg_duplicate_rec)
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=CommonMsgLabels.err_msg_duplicate_rec)
             
 
     ###########WHEN UPDATE FIELD EXISTS#############
     def _checkIfUpdateFieldExists(self, user_data_dict:Company):
         if not user_data_dict:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=UserLabels.err_msg_field_notfound)
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail=CommonMsgLabels.err_msg_field_notfound)
                 
     
     

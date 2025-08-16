@@ -18,12 +18,12 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     content = ResponseSchema(
         success=False,
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        message="Validation Errorssss",
+        message="Validation Errors",
         data=exc.errors()   # returns the list of validation errors
         
     ).model_dump(mode='json')
     return JSONResponse(content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
+#Can be utilized to send the success responses
 def success_response(message: str, data:dict = None, status_code: int = status.HTTP_200_OK):
     """
     Customize and return a success response.

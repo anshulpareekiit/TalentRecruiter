@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session, declarative_base, DeclarativeBase
+from sqlalchemy.orm import sessionmaker, Session
 import os
 from dotenv import load_dotenv
 from app.core.config import settings

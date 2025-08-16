@@ -2,7 +2,7 @@ from app.database.mysqlConnection import Dbsession,get_db #db mysql connection c
 from . import usersModel
 from fastapi import APIRouter, status, Depends
 from app.api.v1.users.usersService import UsersService
-from app.utils.authDependency import checkUserAuthorization
+from app.dependencies.authDependency import checkUserAuthorization
 from app.entities.user import User
 from sqlalchemy.orm import Session
 #base route defining here so we can append other route after this
@@ -24,7 +24,7 @@ async def getAllUsers( db:Dbsession,
 
 #####################create new record####################
 @router.post("/create/", status_code=status.HTTP_201_CREATED)
-async def createUser(user:usersModel.UserCreate, db:Dbsession,auth=Depends(checkUserAuthorization)):
+async def createUser(user:usersModel.UserCreate, db:Dbsession):
     return userServiceObj.createUser(user,db)
 
 #####################update user record####################

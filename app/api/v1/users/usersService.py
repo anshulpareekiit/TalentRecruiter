@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from app.labels.userLabels import UserLabels 
 from sqlalchemy import or_, and_
 from app.utils.responseHandler import success_response
-
+import json
 ###############################################################################################################################
 ############################CLASS CONTAINS USER RELATED FUNCTIONALITIES########################################################
 ##############################################################################################################################
@@ -189,7 +189,9 @@ class UsersService:
     
     ###########SEND EMAIL TO SET PASSWORD############
     def _sendPwdSetEmail(self,user_data:User):
-        CommonFxn.sendEmail(
+        print('user_data:::',user_data.email);
+        
+        self.commonObj.sendEmail(
             {
                 'from': 'abc@gmail.com',
                 'to': user_data.email,

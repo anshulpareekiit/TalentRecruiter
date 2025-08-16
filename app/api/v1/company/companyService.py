@@ -74,7 +74,20 @@ class CompanyService:
         except Exception as e:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=e)
 
-
+    #get companies with limit
+    def getCompanies(self, db:Dbsession, skip: int = 0, limit: int = 10):
+        try:
+            result = db.query(Company).offset(skip).limit(limit).all();
+            if result != None:
+                resp = [companyModel.CompanyResponse.model_validate(res).model_dump_json() for res in result]
+            else:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=CommonMsgLabels.err_msg_record_not_found)
+            return success_response(CommonMsgLabels.msg_record_found,resp)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=e)
+        
+        
+        
 ################################################################################################################    
 #############below are the private functions used for the current class ########################################
 ###############################################################################################################

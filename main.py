@@ -11,8 +11,7 @@ COMMAND: uvicorn main:app --reload
 ######################################################################"""
 from fastapi import FastAPI
 from app.database.mysqlConnection import engine
-from app.entities import user, company, userSessionToken
-from fastapi import FastAPI
+from app.entities import user, company, userSessionToken, jobDescription, associationTables
 #from app.routers import register_routes
 import importlib
 import pkgutil
@@ -35,6 +34,7 @@ def include_all_routers(app, package):
     for _, module_name, _ in pkgutil.iter_modules(package_path):
         module = importlib.import_module(f"{package_name}.{module_name}.{module_name}Controller")
         router = getattr(module, "router", None)
+        print(f"{package_name}.{module_name}.{module_name}Controller")
         if router:
             app.include_router(router)
 # Import your versioned api package

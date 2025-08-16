@@ -10,6 +10,7 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 from app.entities.base import Base
+from app.entities.associationTables import company_users
 
 #importing company with typechecking to prevent circular import
 if TYPE_CHECKING:
@@ -39,9 +40,6 @@ class User(Base):
     token_expire_datetime:Mapped[DateTime] = mapped_column(DateTime,nullable=True)
     is_token_used:Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     created_at:Mapped[DateTime] = mapped_column(DateTime, default=datetime.now())
-    
 #    userSessionToken = relationship('userSessionToken', back_populates='users')
     userSessionToken = relationship("UserSessionToken", back_populates="users", uselist=False)
-
-
-
+    companies = relationship("Company",secondary=company_users, back_populates="users")

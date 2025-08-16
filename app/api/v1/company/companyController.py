@@ -2,13 +2,12 @@ from app.database.mysqlConnection import Dbsession,get_db #db mysql connection c
 from . import companyModel
 from fastapi import APIRouter, status, Depends
 from app.api.v1.company.companyService import CompanyService
-from app.utils.authDependency import checkUserAuthorization
-from app.entities.company import Company
+from app.dependencies.authDependency import checkUserAuthorization
 from sqlalchemy.orm import Session
 #base route defining here so we can append other route after this
 router = APIRouter(
     prefix='/v1/company', 
-    tags=['companies']
+    tags=['Companies Api']
 )
 
 #creating object of User Service
@@ -20,7 +19,7 @@ async def getAllCompanies( db:Dbsession,
                         skip: int = 0, 
                         limit: int = 10, 
                         auth=Depends(checkUserAuthorization)):
-    return companyServiceObj.getCompanyById(db, skip=skip, limit=limit)
+    return companyServiceObj.getCompanies(db, skip=skip, limit=limit)
 
 #####################create new record####################
 @router.post("/create/", status_code=status.HTTP_201_CREATED)

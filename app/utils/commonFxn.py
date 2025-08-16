@@ -7,21 +7,7 @@ import smtplib
 from email.mime.text import MIMEText
 from app.core.config import settings
 class CommonFxn:
-    """#check if object is iterable but not string
-    def is_iterable(self,obj):
-        return isinstance(obj, Iterable) and not isinstance(obj, (str, bytes))
-    
-    #convert response to json and return
-    def responseToJSON(self,model,result):
-        if not self.is_iterable(result):
-            print('iera')
-            resp = model.model_validate(result).model_dump() 
-        else:
-            print('im iterable but no iterable')
-            resp = [model.model_validate(res).model_dump() for res in result]
-        return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
-        """
-    def sendEmail(email_dict:dict):
+    def sendEmail(self,email_dict:dict):
         msg = MIMEText(email_dict.get('body', ''))
         msg['Subject'] = email_dict.get('subject', '')
         msg['From'] = email_dict.get('from', settings.SMTP_USER)
@@ -35,13 +21,14 @@ class CommonFxn:
                 server.starttls()
             server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
             server.sendmail(msg['From'], msg['To'], msg.as_string())
-            
+    
+    
     # Function to hash a password
     def hash_password(self,password: str) -> str:
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
         return hashed_password.decode('utf-8')
-
-    # Function to check if a password matches the hash
+    
+    #### Function to check if a password matches the hash
     def check_password(self, stored_hash: str, password: str) -> bool:
         return bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8'))
